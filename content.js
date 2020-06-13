@@ -122,16 +122,16 @@ function load() {
     var boton1 = document.createElement("a");
     document.body.prepend(boton1);
     boton1.innerText = "CSV";
-    boton1.id = "btnDownload";
+    boton1.id = "btnCSV";
     boton1.href = "#";
     boton1.onclick = descargarCSV();
 
     var boton2 = document.createElement("a");
     document.body.prepend(boton2);
-    boton2.innerText = "Excel";
-    boton2.id = "btnExcel";
+    boton2.innerText = "XLSX";
+    boton2.id = "btnXLSX";
     boton2.href = "#";
-    boton2.onclick = fnExcelReport();
+    boton2.onclick = descargarXLSX();
 
     // var iframe = document.createElement("iframe");
     // document.body.prepend(iframe);
@@ -141,25 +141,26 @@ function load() {
   }
 }
 
-function descargarCSV() {
-  //-------EXPORTAR TABLA A CSV--------------------------------------------------------------------------
-  function exportTableToCSV() {
-    var csv = [];
-    var rows = document.querySelectorAll("#datos > tbody > tr");
-    for (var i = 0; i < rows.length; i++) {
-      var row = [], cols = rows[i].querySelectorAll("td, th");
-      for (var j = 0; j < cols.length; j++) {
-        row.push(cols[j].innerText);
-      };
-      row = row.join(";");
-      csv.push(row);
+//-------EXPORTAR TABLA A CSV--------------------------------------------------------------------------
+function exportTableToCSV() {
+  var csv = [];
+  var rows = document.querySelectorAll("#datos > tbody > tr");
+  for (var i = 0; i < rows.length; i++) {
+    var row = [], cols = rows[i].querySelectorAll("td, th");
+    for (var j = 0; j < cols.length; j++) {
+      row.push(cols[j].innerText);
     };
-    csv = csv.join('\n');
-    // console.log(csv);
-    return csv
-  }
+    row = row.join(";");
+    csv.push(row);
+  };
+  csv = csv.join('\n');
+  // console.log(csv);
+  return csv
+}
+
+function descargarCSV() {
   //-------BAJAR TABLA A CSV--------------------------------------------------------------------------
-  var csvLink = document.querySelector('#btnDownload'),
+  var csvLink = document.querySelector('#btnCSV'),
     csvBlob = new Blob([exportTableToCSV()], { type: "text/csv" }),
     csvName = 'tabla.csv',
     csvUrl = window.URL.createObjectURL(csvBlob);
@@ -167,37 +168,68 @@ function descargarCSV() {
   csvLink.setAttribute('download', csvName);
 };
 
-//-------EXPORTAR TABLA A XLS--------------------------------------------------------------------------
-function fnExcelReport() {
-  var tab_text = "<table id='datos'><tbody><tr>";
-  var textRange; var j = 0;
-  tab = document.getElementById('datos'); // id of table
+//-------EXPORTAR TABLA A XLSX--------------------------------------------------------------------------
 
-  for (j = 0; j < tab.rows.length; j++) {
-    tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
-    //tab_text=tab_text+"</tr>";
-  }
-
-  tab_text = tab_text + "</table>";
-  tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
-  tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
-  tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
-
-  var ua = window.navigator.userAgent;
-  var msie = ua.indexOf("MSIE ");
-
-  if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
-  {
-    txtArea1.document.open("txt/html", "replace");
-    txtArea1.document.write(tab_text);
-    txtArea1.document.close();
-    txtArea1.focus();
-    sa = txtArea1.document.execCommand("SaveAs", true, "Say Thanks to Sumit.xls");
-  }
-  else                 //other browser not tested on IE 11
-    sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
-
-  return (sa);
+function exportTableToXLSX(s) {
+  var buf = new ArrayBuffer(s.length);
+  var view = new Uint8Array(buf);
+  for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+  return buf;
 }
+
+function descargarXLSX() {
+  var wbout = XLSX.utils.table_to_book(document.getElementById('datos'), { sheet: "Sheet JS" });
+  // var xlsxBlob = (new Blob([exportTableToXLSX(wbout)], { type: "application/octet-stream" }), 'test.xlsx');
+
+
+  // var xlsxLink = document.querySelector('#btnXLSX');
+  var xlsxBlob = new Blob([exportTableToXLSX(wbout)], { type: "application/octet-stream" });
+  //   xlsxName = 'tabla.xlsx',
+  //   xlsxUrl = window.URL.createObjectURL(xlsxBlob);
+  // xlsxLink.setAttribute('href', xlsxUrl);
+  // xlsxLink.setAttribute('download', xlsxName);
+
+
+
+  saveAs(xlsxBlob, 'tabla.xlsx');
+}
+
+// $("#btnXLSX").click(function () {
+//   var wbout = XLSX.utils.table_to_book(document.getElementById('datos'), { sheet: "Sheet JS" });
+//  saveAs(new Blob([exportTableToXLSX(wbout)], { type: "application/octet-stream" }), 'test.xlsx');
+// });
+
+//-------EXPORTAR TABLA A XLS--------------------------------------------------------------------------
+// function fnExcelReport() {
+//   var tab_text = "<table id='datos'><tbody><tr>";
+//   var textRange; var j = 0;
+//   tab = document.getElementById('datos'); // id of table
+
+//   for (j = 0; j < tab.rows.length; j++) {
+//     tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
+//     //tab_text=tab_text+"</tr>";
+//   }
+
+//   tab_text = tab_text + "</table>";
+//   tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+//   tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
+//   tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+
+//   var ua = window.navigator.userAgent;
+//   var msie = ua.indexOf("MSIE ");
+
+//   if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+//   {
+//     txtArea1.document.open("txt/html", "replace");
+//     txtArea1.document.write(tab_text);
+//     txtArea1.document.close();
+//     txtArea1.focus();
+//     sa = txtArea1.document.execCommand("SaveAs", true, "Say Thanks to Sumit.xls");
+//   }
+//   else                 //other browser not tested on IE 11
+//     sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+
+//   return (sa);
+// }
 
 load();

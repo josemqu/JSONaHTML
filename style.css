@@ -17,8 +17,8 @@ th {
   padding: 3px;
 }
 
-#btnDownload,
-#btnExcel {
+#btnCSV,
+#btnXLSX {
   box-sizing: border-box;
   margin: 5px;
   border-radius: 3px;
