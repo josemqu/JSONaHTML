@@ -6,12 +6,11 @@
   "homepage_url": "https://web.hakopako.net/",
   "content_scripts": [{
     "matches": ["*://*/*", "file://*/*"],
-    "js": ["scripts/jquery.min.js", "scripts/xlsx.full.min.js", "scripts/FileSaver.min.js", "scripts/FileSaver.js", "content.js"],
-    "map": ["scripts/FileSaver.min.js.map"],
+    "js": ["scripts/jquery.min.js", "scripts/xlsx.full.min.js", "content.js"],
     "run_at": "document_idle"
   }],
   "web_accessible_resources": [
-    "scripts/jquery.min.js", "scripts/xlsx.full.min.js", "scripts/FileSaver.min.js", "scripts/FileSaver.min.js", "scripts/FileSaver.min.js.map", "style.css"
+    "scripts/jquery.min.js", "scripts/xlsx.full.min.js", "style.css"
   ],
   "permissions": ["downloads"]
 }
