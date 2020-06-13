@@ -16,3 +16,24 @@ th {
   margin: 0px;
   padding: 3px;
 }
+
+#btnDownload,
+#btnExcel {
+  box-sizing: border-box;
+  margin: 5px;
+  border-radius: 3px;
+  text-decoration: none;
+  text-align: center;
+  vertical-align: middle;
+  background: -webkit-linear-gradient(#fafafa, #f4f4f4 40%, #e5e5e5);
+  border: 1px solid #aaa;
+  color: #444;
+  font-size: 12px;
+  min-width: 4em;
+  padding: 3px 0;
+  position: relative;
+  z-index: 10;
+  display: inline-block;
+  width: 80px;
+  text-shadow: 1px 1px rgba(255, 255, 255, 0.7);
+}
