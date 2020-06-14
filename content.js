@@ -1,6 +1,7 @@
-function armarTabla(obj) {
+function JsonToHTML(obj) {
   var cols = [];
   var table = document.createElement("table");
+  table.id = "tablaHTML";
 
   if (obj instanceof Array) {
     console.log(obj);
@@ -87,7 +88,7 @@ function armarTabla(obj) {
 
       // Create the table header th element
       var td = document.createElement("td");
-      td.appendChild(armarTabla(obj[cols[i]]));
+      td.appendChild(JsonToHTML(obj[cols[i]]));
 
       // Append columnName to the table row
       tr.appendChild(td);
@@ -102,22 +103,28 @@ function armarTabla(obj) {
     // Inserting the cell at particular place
     cell.innerHTML = obj;
   }
-
   return table
 }
 
+let table;
+let div;
+let data = load();
+let json = JSON.parse(data);
+
 function load() {
-  var child, data;
+  var child;
   if (document.body && (document.body.childNodes[0] && document.body.childNodes[0].tagName == "PRE" || document.body.children.length == 0)) {
     var child = document.body.children.length ? document.body.childNodes[0] : document.body;
     var data = child.innerText;
     var json = JSON.parse(data);
-    var table = armarTabla(json);
+
+    // pre.id = 'preJSON';
+    // pre.innerHTML = data;
+    table = JsonToHTML(json);
+    table.id = 'tableHTML';
 
     content = '<link rel="stylesheet" type="text/css" href="' + chrome.runtime.getURL("style.css") + '">';
     document.body.innerHTML = content;
-
-    document.body.appendChild(table);
 
     var boton1 = document.createElement("a");
     document.body.prepend(boton1);
@@ -131,8 +138,75 @@ function load() {
     boton2.innerText = "XLSX";
     boton2.id = "btnXLSX";
     boton2.href = "#";
-    // boton2.onclick = descargarXLSX('xlsx');
     boton2.addEventListener('click', descargarXLSX, true);
+
+    var boton3 = document.createElement("a");
+    document.body.append(boton3);
+    boton3.innerText = "Tabla";
+    boton3.id = "btnHTML";
+    boton3.href = "#";
+    boton3.addEventListener('click', mostrarTabla, true);
+
+    var boton4 = document.createElement("a");
+    document.body.append(boton4);
+    boton4.innerText = "JSON";
+    boton4.id = "btnJSON";
+    boton4.href = "#";
+    boton4.addEventListener('click', mostrarJson, true);
+
+    var boton5 = document.createElement("a");
+    document.body.append(boton5);
+    boton5.innerText = "RAW";
+    boton5.id = "btnRAW";
+    boton5.href = "#";
+    boton5.addEventListener('click', mostrarRaw, true);
+
+    // let pre = document.createElement('pre');
+    // document.body.appendChild(pre).innerHTML = data;
+    div = document.createElement('div');
+    div.id = "contenedor";
+    document.body.appendChild(div).innerText = data;
+  }
+  return data
+}
+
+function mostrarTabla() {
+  var pre = document.querySelector('pre');
+  var cont = document.querySelector('#contenedor');
+  if (pre) { pre.remove() }
+  if (cont) { cont.remove() }
+  table.remove();
+  document.body.appendChild(table);
+}
+
+function mostrarJson() {
+  tabla = document.querySelector('#tableHTML');
+  var pre = document.querySelector('pre');
+  var cont = document.querySelector('#contenedor');
+  if (tabla) { tabla.remove() }
+  if (cont) { cont.remove() }
+  if (pre) {
+    pre.innerHTML = JSON.stringify(json, null, 2);
+  } else {
+    var pre = document.createElement('pre');
+    pre.innerText = JSON.stringify(json, null, 2);
+    document.body.appendChild(pre);
+  }
+}
+
+function mostrarRaw() {
+  tabla = document.querySelector('#tableHTML');
+  var pre = document.querySelector('pre');
+  var cont = document.querySelector('#contenedor');
+  if (tabla) { tabla.remove() }
+  if (pre) { pre.remove() }
+  if (cont) {
+    cont.innerHTML = data
+  } else {
+    var cont = document.createElement('div');
+    cont.id = "contenedor";
+    cont.innerText = data;
+    document.body.appendChild(cont).innerHTML = data;
   }
 }
 
@@ -149,7 +223,6 @@ function exportTableToCSV() {
     csv.push(row);
   };
   csv = csv.join('\n');
-  // console.log(csv);
   return csv
 }
 

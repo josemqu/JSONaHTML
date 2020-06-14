@@ -17,8 +17,7 @@ th {
   padding: 3px;
 }
 
-#btnCSV,
-#btnXLSX {
+a {
   box-sizing: border-box;
   margin: 5px;
   border-radius: 3px;
@@ -36,4 +35,8 @@ th {
   display: inline-block;
   width: 80px;
   text-shadow: 1px 1px rgba(255, 255, 255, 0.7);
+}
+
+pre {
+  display: flex;
 }
