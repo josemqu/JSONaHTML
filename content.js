@@ -22,7 +22,7 @@ function JsonToHTML(obj) {
     // var table = document.createElement("table");
 
     // Create table row tr element of a table
-    table.id = "datos";
+    table.id = "tablaHTML";
     var tr = table.insertRow(-1);
 
     for (var i = 0; i < cols.length; i++) {
@@ -161,7 +161,7 @@ function load() {
     // pre.id = 'preJSON';
     // pre.innerHTML = data;
     table = JsonToHTML(json);
-    table.id = 'tableHTML';
+    table.id = 'tablaHTML';
 
     content = '<link rel="stylesheet" type="text/css" href="' + chrome.runtime.getURL("style.css") + '">';
     document.body.innerHTML = content;
@@ -190,7 +190,7 @@ function mostrarTabla() {
 }
 
 function mostrarJson() {
-  tabla = document.querySelector('#tableHTML');
+  tabla = document.querySelector('#tablaHTML');
   var pre = document.querySelector('pre');
   var cont = document.querySelector('#contenedor');
   if (tabla) { tabla.remove() }
@@ -210,7 +210,7 @@ function mostrarJson() {
 }
 
 function mostrarRaw() {
-  tabla = document.querySelector('#tableHTML');
+  tabla = document.querySelector('#tablaHTML');
   var pre = document.querySelector('pre');
   var cont = document.querySelector('#contenedor');
   if (tabla) { tabla.remove() }
@@ -233,7 +233,7 @@ function mostrarRaw() {
 //-------EXPORTAR TABLA A CSV--------------------------------------------------------------------------
 function exportTableToCSV() {
   var csv = [];
-  var rows = document.querySelectorAll("#datos > tbody > tr");
+  var rows = document.querySelectorAll("#tablaHTML > tbody > tr");
   for (var i = 0; i < rows.length; i++) {
     var row = [], cols = rows[i].querySelectorAll("td, th");
     for (var j = 0; j < cols.length; j++) {
@@ -259,7 +259,7 @@ function descargarCSV() {
 //-------EXPORTAR TABLA A XLSX--------------------------------------------------------------------------
 function descargarXLSX(type, fn, dl) {
   type = 'xlsx'
-  var elt = document.getElementById('datos');
+  var elt = document.getElementById('tablaHTML');
   var wb = XLSX.utils.table_to_book(elt, { sheet: "Sheet JS" });
   return dl ?
     XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }) :
