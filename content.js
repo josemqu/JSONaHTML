@@ -111,6 +111,46 @@ let div;
 let data = load();
 let json = JSON.parse(data);
 
+
+var boton1 = document.createElement("a");
+document.body.prepend(boton1);
+boton1.innerText = "CSV";
+boton1.id = "btnCSV";
+boton1.href = "#";
+boton1.onclick = descargarCSV();
+boton1.setAttribute('class', 'disable');
+
+var boton2 = document.createElement("a");
+document.body.prepend(boton2);
+boton2.innerText = "XLSX";
+boton2.id = "btnXLSX";
+boton2.href = "#";
+boton2.addEventListener('click', descargarXLSX, true);
+boton2.setAttribute('class', 'disable');
+
+var boton3 = document.createElement("a");
+document.body.prepend(boton3);
+boton3.innerText = "Tabla";
+boton3.id = "btnHTML";
+boton3.href = "#";
+boton3.addEventListener('click', mostrarTabla, true);
+
+var boton4 = document.createElement("a");
+document.body.prepend(boton4);
+boton4.innerText = "JSON";
+boton4.id = "btnJSON";
+boton4.href = "#";
+boton4.addEventListener('click', mostrarJson, true);
+
+var boton5 = document.createElement("a");
+document.body.prepend(boton5);
+boton5.innerText = "RAW";
+boton5.id = "btnRAW";
+boton5.href = "#";
+boton5.addEventListener('click', mostrarRaw, true);
+boton5.setAttribute('class', 'selected');
+
+
 function load() {
   var child;
   if (document.body && (document.body.childNodes[0] && document.body.childNodes[0].tagName == "PRE" || document.body.children.length == 0)) {
@@ -125,42 +165,6 @@ function load() {
 
     content = '<link rel="stylesheet" type="text/css" href="' + chrome.runtime.getURL("style.css") + '">';
     document.body.innerHTML = content;
-
-    var boton1 = document.createElement("a");
-    document.body.prepend(boton1);
-    boton1.innerText = "CSV";
-    boton1.id = "btnCSV";
-    boton1.href = "#";
-    boton1.onclick = descargarCSV();
-
-    var boton2 = document.createElement("a");
-    document.body.prepend(boton2);
-    boton2.innerText = "XLSX";
-    boton2.id = "btnXLSX";
-    boton2.href = "#";
-    boton2.addEventListener('click', descargarXLSX, true);
-
-    var boton3 = document.createElement("a");
-    document.body.append(boton3);
-    boton3.innerText = "Tabla";
-    boton3.id = "btnHTML";
-    boton3.href = "#";
-    boton3.addEventListener('click', mostrarTabla, true);
-
-    var boton4 = document.createElement("a");
-    document.body.append(boton4);
-    boton4.innerText = "JSON";
-    boton4.id = "btnJSON";
-    boton4.href = "#";
-    boton4.addEventListener('click', mostrarJson, true);
-
-    var boton5 = document.createElement("a");
-    document.body.append(boton5);
-    boton5.innerText = "RAW";
-    boton5.id = "btnRAW";
-    boton5.href = "#";
-    boton5.addEventListener('click', mostrarRaw, true);
-
     // let pre = document.createElement('pre');
     // document.body.appendChild(pre).innerHTML = data;
     div = document.createElement('div');
@@ -177,6 +181,12 @@ function mostrarTabla() {
   if (cont) { cont.remove() }
   table.remove();
   document.body.appendChild(table);
+  document.getElementById('btnXLSX').classList.remove('disable');
+  document.getElementById('btnCSV').classList.remove('disable');
+  document.getElementById('btnHTML').setAttribute('class', 'selected');
+  document.getElementById('btnRAW').classList.remove('selected');
+  document.getElementById('btnJSON').classList.remove('selected');
+
 }
 
 function mostrarJson() {
@@ -192,6 +202,11 @@ function mostrarJson() {
     pre.innerText = JSON.stringify(json, null, 2);
     document.body.appendChild(pre);
   }
+  document.getElementById('btnXLSX').setAttribute('class', 'disable');
+  document.getElementById('btnCSV').setAttribute('class', 'disable');
+  document.getElementById('btnJSON').setAttribute('class', 'selected');
+  document.getElementById('btnRAW').classList.remove('selected');
+  document.getElementById('btnHTML').classList.remove('selected');
 }
 
 function mostrarRaw() {
@@ -208,6 +223,11 @@ function mostrarRaw() {
     cont.innerText = data;
     document.body.appendChild(cont).innerHTML = data;
   }
+  document.getElementById('btnXLSX').setAttribute('class', 'disable');
+  document.getElementById('btnCSV').setAttribute('class', 'disable');
+  document.getElementById('btnRAW').setAttribute('class', 'selected');
+  document.getElementById('btnJSON').classList.remove('selected');
+  document.getElementById('btnHTML').classList.remove('selected');
 }
 
 //-------EXPORTAR TABLA A CSV--------------------------------------------------------------------------

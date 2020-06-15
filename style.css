@@ -18,6 +18,7 @@ th {
 }
 
 a {
+  user-select: none;
   box-sizing: border-box;
   margin: 5px;
   border-radius: 3px;
@@ -35,6 +36,20 @@ a {
   display: inline-block;
   width: 80px;
   text-shadow: 1px 1px rgba(255, 255, 255, 0.7);
+  transition: all 100ms linear;
+}
+
+a:hover,
+a.selected {
+  font-weight: bold;
+  border-color: rgb(50, 50, 50);
+}
+
+a.disable {
+  color: rgb(200, 200, 200);
+  border-color: rgb(200, 200, 200);
+  cursor: default;
+  pointer-events: none;
 }
 
 pre {
