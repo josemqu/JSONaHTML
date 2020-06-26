@@ -44,7 +44,14 @@ function JsonToHTML(obj) {
         var cell = trow.insertCell(-1);
 
         // Inserting the cell at particular place
-        cell.innerHTML = obj[i][cols[j]];
+
+        if (obj[i][cols[j]] instanceof Object) {
+          cell.innerHTML = JSON.stringify(obj[i][cols[j]]);
+
+        } else {
+          cell.innerHTML = obj[i][cols[j]];
+
+        }
       }
     }
 
