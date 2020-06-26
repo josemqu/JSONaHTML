@@ -1,12 +1,12 @@
 function JsonToHTML(obj) {
   var cols = [];
-  var table = document.createElement("table");
-  table.id = "tablaHTML";
+  // var table = document.createElement("table");
+  // table.id = "tablaHTML";
 
   if (obj instanceof Array) {
     console.log(obj);
     var cols = [];
-    // var table = document.createElement("table");
+    var table = document.createElement("table");
 
     for (var i = 0; i < obj.length; i++) {
       for (var k in obj[i]) {
@@ -22,6 +22,9 @@ function JsonToHTML(obj) {
     // var table = document.createElement("table");
 
     // Create table row tr element of a table
+
+
+
     table.id = "tablaHTML";
     var tr = table.insertRow(-1);
 
@@ -74,7 +77,8 @@ function JsonToHTML(obj) {
       // }
     }
     // Create a table element 
-    // var table = document.createElement("table");
+    var table = document.createElement("table");
+    table.id = 'tablaHTML';
 
     // Create table row tr element of a table
     var tr = table.insertRow(-1);
@@ -95,7 +99,9 @@ function JsonToHTML(obj) {
 
       // Create the table header th element
       var td = document.createElement("td");
-      td.appendChild(JsonToHTML(obj[cols[i]]));
+      // td.appendChild(JsonToHTML(obj[cols[i]]));
+      td.innerText = JsonToHTML(obj[cols[i]]);
+      // console.log(obj[cols[i]]);
 
       // Append columnName to the table row
       tr.appendChild(td);
@@ -105,10 +111,13 @@ function JsonToHTML(obj) {
     // Adding the data to the table
     // Create a new row 
     // console.log(obj);
-    trow = table.insertRow(-1);
-    var cell = trow.insertCell(-1);
+
+    // trow = table.insertRow(-1);
+    // var cell = trow.insertCell(-1);
     // Inserting the cell at particular place
-    cell.innerHTML = obj;
+    // var table = document.getElementById('tablaHTML');
+    // table.innerHTML = obj;
+    return obj
   }
   return table
 }
