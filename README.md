@@ -4,4 +4,4 @@ This is a Chrome Extension to convert JSON APIs to HTML tables.
 
 ## Installation
 
-Just download it, go to [Extensions](chrome://extensions) and Load Unpacked Extension.
+Just download it, go to [(chrome://extensions)] and Load Unpacked Extension.
