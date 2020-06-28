@@ -1,124 +1,53 @@
-function JsonToHTML(obj) {
+function objectToTable(obj) {
+  var cols = Object.keys(obj);
+  var vals = Object.values(obj);
+  var rows = '';
+
+  rows += `<tr> ${cols.map(elm => `<th>${elm}</th>`).join('')}</tr>`;
+  rows += `<tr> ${vals.map(elm => `<td>${(elm instanceof Array) ? '<table class="inner">' + objectArrayToTable(elm) + '</table>' : elm}</td>`).join('')}</tr>`;
+
+  return rows
+}
+
+function objectArrayToTable(arr) {
   var cols = [];
-  // var table = document.createElement("table");
-  // table.id = "tablaHTML";
-
-  if (obj instanceof Array) {
-    console.log(obj);
-    var cols = [];
-    var table = document.createElement("table");
-
-    for (var i = 0; i < obj.length; i++) {
-      for (var k in obj[i]) {
-        if (cols.indexOf(k) === -1) {
-
-          // Push all keys to the array 
-          cols.push(k);
-        }
+  var rows = '<tr>';
+  for (var i = 0; i < arr.length; i++) {
+    for (var k in arr[i]) {
+      if (cols.indexOf(k) === -1) {
+        cols.push(k);
       }
     }
-
-    // Create a table element 
-    // var table = document.createElement("table");
-
-    // Create table row tr element of a table
-
-
-
-    table.id = "tablaHTML";
-    var tr = table.insertRow(-1);
-
-    for (var i = 0; i < cols.length; i++) {
-
-      // Create the table header th element
-      var theader = document.createElement("th");
-      theader.innerHTML = cols[i];
-
-      // Append columnName to the table row
-      tr.appendChild(theader);
-    }
-
-    // Adding the data to the table
-    for (var i = 0; i < obj.length; i++) {
-
-      // Create a new row 
-      trow = table.insertRow(-1);
-      for (var j = 0; j < cols.length; j++) {
-        var cell = trow.insertCell(-1);
-
-        // Inserting the cell at particular place
-
-        if (obj[i][cols[j]] instanceof Object) {
-          cell.innerHTML = JSON.stringify(obj[i][cols[j]]);
-
-        } else {
-          cell.innerHTML = obj[i][cols[j]];
-
-        }
-      }
-    }
-
-    // Add the newely created table containing json data
-    // var el = document.getElementById("res");
-
-
-    // el.innerHTML = "";
-    // el.appendChild(table);
-
-  } else if (obj instanceof Object) {
-    // console.log(obj);
-    var prop = Object.keys(obj);
-
-    for (var k = 0; k < prop.length; k++) {
-      // if (cols.indexOf(k) === -1) {
-
-      // Push all keys to the array
-      cols.push(prop[k]);
-      // }
-    }
-    // Create a table element 
-    var table = document.createElement("table");
-    table.id = 'tablaHTML';
-
-    // Create table row tr element of a table
-    var tr = table.insertRow(-1);
-
-    for (var i = 0; i < cols.length; i++) {
-
-      // Create the table header th element
-      var theader = document.createElement("th");
-      theader.innerHTML = cols[i];
-
-      // Append columnName to the table row
-      tr.appendChild(theader);
-    }
-
-    var tr = table.insertRow(-1);
-
-    for (var i = 0; i < cols.length; i++) {
-
-      // Create the table header th element
-      var td = document.createElement("td");
-      // td.appendChild(JsonToHTML(obj[cols[i]]));
-      td.innerText = JsonToHTML(obj[cols[i]]);
-      // console.log(obj[cols[i]]);
-
-      // Append columnName to the table row
-      tr.appendChild(td);
-    }
-
-  } else if (obj) {
-    // Adding the data to the table
-    // Create a new row 
-    // console.log(obj);
-
-    // trow = table.insertRow(-1);
-    // var cell = trow.insertCell(-1);
-    // Inserting the cell at particular place
-    // var table = document.getElementById('tablaHTML');
-    // table.innerHTML = obj;
-    return obj
   }
+  for (j = 0; j < cols.length; j++) {
+    rows += `<th> ${cols[j]}</th>`;
+  }
+  rows += `</tr>`;
+
+  for (i = 0; i < arr.length; i++) {
+    rows += `<tr>`;
+    for (j = 0; j < cols.length; j++) {
+      rows += `<td>${((arr[i][cols[j]]) instanceof Object) ? '<table class="inner">' + objectToTable(arr[i][cols[j]]) + '</table>' : arr[i][cols[j]]}</td>`;
+    }
+    rows += `</tr>`;
+  }
+  return rows
+}
+
+function JsonToHTML(el) {
+  var table = document.createElement("table");
+  if (el instanceof Array) {
+    for (var i = 0; i < el.length; i++) {
+      if (el[i] instanceof Object) {
+        table.innerHTML = objectArrayToTable(el);
+      } else {
+        // table.innerHTML = objectToTable(el[i]);
+      }
+    }
+  } else if (el instanceof Object) {
+    table.innerHTML = objectToTable(el);
+  }
+  // console.log(table);
   return table
 }
 
@@ -126,7 +55,6 @@ let table;
 let div;
 let data = load();
 let json = JSON.parse(data);
-
 
 var boton1 = document.createElement("a");
 document.body.prepend(boton1);
@@ -166,7 +94,6 @@ boton5.href = "#";
 boton5.addEventListener('click', mostrarRaw, true);
 boton5.setAttribute('class', 'selected');
 
-
 function load() {
   var child;
   if (document.body && (document.body.childNodes[0] && document.body.childNodes[0].tagName == "PRE" || document.body.children.length == 0)) {
@@ -202,7 +129,6 @@ function mostrarTabla() {
   document.getElementById('btnHTML').setAttribute('class', 'selected');
   document.getElementById('btnRAW').classList.remove('selected');
   document.getElementById('btnJSON').classList.remove('selected');
-
 }
 
 function mostrarJson() {
