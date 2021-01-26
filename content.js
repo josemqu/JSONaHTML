@@ -4,7 +4,8 @@ function objectToTable(obj) {
   var rows = '';
 
   rows += `<tr> ${cols.map(elm => `<th>${elm}</th>`).join('')}</tr>`;
-  rows += `<tr> ${vals.map(elm => `<td>${(elm instanceof Array) ? '<table class="inner">' + objectArrayToTable(elm) + '</table>' : elm}</td>`).join('')}</tr>`;
+  // rows += `<tr> ${vals.map(elm => `<td>${(elm instanceof Array) ? '<table class="inner">' + objectArrayToTable(elm) + '</table>' : elm}</td>`).join('')}</tr>`;
+  rows += `<tr> ${vals.map(elm => `<td>${(elm instanceof Array) ? '<table class="inner">' + objectArrayToTable(elm) + '</table>' : ((elm instanceof Object) ? '<table class="inner">' + objectToTable(elm) + '</table>' : elm)}</td>`).join('')}</tr>`;
 
   return rows
 }
