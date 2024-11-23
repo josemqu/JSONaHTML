@@ -77,47 +77,42 @@ function JsonToHTML(el) {
 
 let table;
 let div;
-let data = load();
+let data;
+if (
+  document.body &&
+  ((document.body.childNodes[0] &&
+    document.body.childNodes[0].tagName == "PRE") ||
+    document.body.children.length == 0)
+) {
+  data = load();
+}
 let json;
-if (data) json = JSON.parse(data);
+if (data) {
+  json = JSON.parse(data);
 
-var boton1 = document.createElement("a");
-document.body.prepend(boton1);
-boton1.innerText = "CSV";
-boton1.id = "btnCSV";
-boton1.href = "#";
-boton1.onclick = descargarCSV();
-boton1.setAttribute("class", "disable");
+  const buttons = [
+    { text: "CSV", id: "btnCSV", clickHandler: descargarCSV, class: "disable" },
+    {
+      text: "XLSX",
+      id: "btnXLSX",
+      clickHandler: descargarXLSX,
+      class: "disable",
+    },
+    { text: "Tabla", id: "btnHTML", clickHandler: mostrarTabla },
+    { text: "JSON", id: "btnJSON", clickHandler: mostrarJson },
+    { text: "RAW", id: "btnRAW", clickHandler: mostrarRaw, class: "selected" },
+  ];
 
-var boton2 = document.createElement("a");
-document.body.prepend(boton2);
-boton2.innerText = "XLSX";
-boton2.id = "btnXLSX";
-boton2.href = "#";
-boton2.addEventListener("click", descargarXLSX, true);
-boton2.setAttribute("class", "disable");
-
-var boton3 = document.createElement("a");
-document.body.prepend(boton3);
-boton3.innerText = "Tabla";
-boton3.id = "btnHTML";
-boton3.href = "#";
-boton3.addEventListener("click", mostrarTabla, true);
-
-var boton4 = document.createElement("a");
-document.body.prepend(boton4);
-boton4.innerText = "JSON";
-boton4.id = "btnJSON";
-boton4.href = "#";
-boton4.addEventListener("click", mostrarJson, true);
-
-var boton5 = document.createElement("a");
-document.body.prepend(boton5);
-boton5.innerText = "RAW";
-boton5.id = "btnRAW";
-boton5.href = "#";
-boton5.addEventListener("click", mostrarRaw, true);
-boton5.setAttribute("class", "selected");
+  buttons.forEach(({ text, id, clickHandler, class: className }) => {
+    const button = document.createElement("a");
+    button.innerText = text;
+    button.id = id;
+    button.href = "#";
+    button.addEventListener("click", clickHandler, true);
+    if (className) button.setAttribute("class", className);
+    document.body.prepend(button);
+  });
+}
 
 function load() {
   console.log("load");
@@ -152,6 +147,8 @@ function load() {
     div = document.createElement("div");
     div.id = "contenedor";
     document.body.appendChild(div).innerText = data;
+  } else {
+    return;
   }
   document.body.classList.add(dark ? "dark-mode" : "light-mode");
   return data;
@@ -260,5 +257,3 @@ function descargarXLSX(type, fn, dl) {
     ? XLSX.write(wb, { bookType: type, bookSST: true, type: "base64" })
     : XLSX.writeFile(wb, fn || "tabla." + (type || "xlsx"));
 }
-
-load();
