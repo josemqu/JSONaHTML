@@ -78,7 +78,8 @@ function JsonToHTML(el) {
 let table;
 let div;
 let data = load();
-let json = JSON.parse(data);
+let json;
+if (data) json = JSON.parse(data);
 
 var boton1 = document.createElement("a");
 document.body.prepend(boton1);
